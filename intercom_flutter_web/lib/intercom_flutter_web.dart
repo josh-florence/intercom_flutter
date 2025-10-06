@@ -87,7 +87,8 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
     if (userId?.isNotEmpty ?? false) {
       if (email?.isNotEmpty ?? false) {
         throw ArgumentError(
-            'The parameter `email` must be null if `userId` is provided.');
+          'The parameter `email` must be null if `userId` is provided.',
+        );
       }
       // register the user with userId
       globalContext.callMethod(
@@ -108,13 +109,15 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
       statusCallback?.onSuccess?.call();
     } else {
       throw ArgumentError(
-          'An identification method must be provided as a parameter, either `userId` or `email`.');
+        'An identification method must be provided as a parameter, either `userId` or `email`.',
+      );
     }
   }
 
   @override
-  Future<void> loginUnidentifiedUser(
-      {IntercomStatusCallback? statusCallback}) async {
+  Future<void> loginUnidentifiedUser({
+    IntercomStatusCallback? statusCallback,
+  }) async {
     // to register an unidentified user, a unique id will be created using the package uuid
     String userId = Uuid().v1();
     globalContext.callMethod(
@@ -180,7 +183,10 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
     }
 
     globalContext.callMethod(
-        'Intercom'.toJS, 'update'.toJS, userAttributes.jsify());
+      'Intercom'.toJS,
+      'update'.toJS,
+      userAttributes.jsify(),
+    );
     // send the success callback only as web does not support the statusCallback.
     statusCallback?.onSuccess?.call();
   }
@@ -249,7 +255,10 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
   @override
   Future<void> displayMessageComposer(String message) async {
     globalContext.callMethod(
-        'Intercom'.toJS, 'showNewMessage'.toJS, message.toJS);
+      'Intercom'.toJS,
+      'showNewMessage'.toJS,
+      message.toJS,
+    );
     print("Message composer displayed");
   }
 
@@ -264,10 +273,7 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
     globalContext.callMethod(
       'Intercom'.toJS,
       'update'.toJS,
-      updateIntercomSettings(
-        'vertical_padding',
-        padding,
-      ).jsify(),
+      updateIntercomSettings('vertical_padding', padding).jsify(),
     );
 
     print("Bottom padding set");
@@ -276,19 +282,28 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
   @override
   Future<void> displayArticle(String articleId) async {
     globalContext.callMethod(
-        'Intercom'.toJS, 'showArticle'.toJS, articleId.toJS);
+      'Intercom'.toJS,
+      'showArticle'.toJS,
+      articleId.toJS,
+    );
   }
 
   @override
   Future<void> displaySurvey(String surveyId) async {
     globalContext.callMethod(
-        'Intercom'.toJS, 'startSurvey'.toJS, surveyId.toJS);
+      'Intercom'.toJS,
+      'startSurvey'.toJS,
+      surveyId.toJS,
+    );
   }
 
   @override
   Future<void> displayConversation(String conversationId) async {
     globalContext.callMethod(
-        'Intercom'.toJS, 'showConversation'.toJS, conversationId.toJS);
+      'Intercom'.toJS,
+      'showConversation'.toJS,
+      conversationId.toJS,
+    );
   }
 
   @override
@@ -352,6 +367,32 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
     print("Auth tokens added");
   }
 
+  @override
+  Future<void> changeWorkspace(
+    String appId, {
+    String? androidApiKey,
+    String? iosApiKey,
+  }) async {
+    // For web, we shutdown the current workspace and boot with the new appId
+    // Clear user data first
+    removeIntercomSettings([
+      'user_hash',
+      'intercom_user_jwt',
+      'user_id',
+      'email',
+      'auth_tokens',
+    ]);
+    // Shutdown current workspace
+    globalContext.callMethod('Intercom'.toJS, 'shutdown'.toJS);
+    // Boot with new workspace
+    globalContext.callMethod(
+      'Intercom'.toJS,
+      'boot'.toJS,
+      updateIntercomSettings('app_id', appId).jsify(),
+    );
+    print("Workspace changed");
+  }
+
   /// get the [window.intercomSettings]
   Map<dynamic, dynamic> getIntercomSettings() {
     if (globalContext.hasProperty('intercomSettings'.toJS).toDart) {
@@ -372,7 +413,9 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
 
     // Update the [window.intercomSettings]
     globalContext.setProperty(
-        "intercomSettings".toJS, intercomSettings.jsify());
+      "intercomSettings".toJS,
+      intercomSettings.jsify(),
+    );
 
     return intercomSettings;
   }
@@ -388,7 +431,9 @@ class IntercomFlutterWeb extends IntercomFlutterPlatform {
 
     // Update the [window.intercomSettings]
     globalContext.setProperty(
-        "intercomSettings".toJS, intercomSettings.jsify());
+      "intercomSettings".toJS,
+      intercomSettings.jsify(),
+    );
 
     return intercomSettings;
   }
