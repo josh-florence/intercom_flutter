@@ -70,8 +70,11 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   ///
   /// You can register a identified user either with [userId] or with [email],
   /// but not with both.
-  Future<void> loginIdentifiedUser(
-      {String? userId, String? email, IntercomStatusCallback? statusCallback}) {
+  Future<void> loginIdentifiedUser({
+    String? userId,
+    String? email,
+    IntercomStatusCallback? statusCallback,
+  }) {
     throw UnimplementedError('loginIdentifiedUser() has not been implemented.');
   }
 
@@ -80,7 +83,8 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// track their activity in your app.
   Future<void> loginUnidentifiedUser({IntercomStatusCallback? statusCallback}) {
     throw UnimplementedError(
-        'loginUnidentifiedUser() has not been implemented.');
+      'loginUnidentifiedUser() has not been implemented.',
+    );
   }
 
   /// Updates the attributes of the current Intercom user.
@@ -117,7 +121,8 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// To hide or show the standard launcher on the bottom right-hand side of the screen.
   Future<void> setLauncherVisibility(IntercomVisibility visibility) {
     throw UnimplementedError(
-        'setLauncherVisibility() has not been implemented.');
+      'setLauncherVisibility() has not been implemented.',
+    );
   }
 
   /// You can check how many unread conversations a user has
@@ -126,13 +131,15 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// You can get the current unread conversation count with this method.
   Future<int> unreadConversationCount() {
     throw UnimplementedError(
-        'unreadConversationCount() has not been implemented.');
+      'unreadConversationCount() has not been implemented.',
+    );
   }
 
   /// To allow or prevent in app messages from popping up in certain parts of your app.
   Future<void> setInAppMessagesVisibility(IntercomVisibility visibility) {
     throw UnimplementedError(
-        'setInAppMessagesVisibility() has not been implemented.');
+      'setInAppMessagesVisibility() has not been implemented.',
+    );
   }
 
   /// To open the Intercom messenger.
@@ -167,7 +174,8 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// The [collectionIds] you want to display.
   Future<void> displayHelpCenterCollections(List<String> collectionIds) {
     throw UnimplementedError(
-        'displayHelpCenterCollections() has not been implemented.');
+      'displayHelpCenterCollections() has not been implemented.',
+    );
   }
 
   /// To display an Activity with your Messages content.
@@ -195,7 +203,8 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   ///
   /// When you want Intercom to act on that data, use this method.
   @Deprecated(
-      "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.")
+    "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.",
+  )
   Future<void> handlePushMessage() {
     throw UnimplementedError('handlePushMessage() has not been implemented.');
   }
@@ -204,7 +213,8 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// field pre-populated.
   Future<void> displayMessageComposer(String message) {
     throw UnimplementedError(
-        'displayMessageComposer() has not been implemented.');
+      'displayMessageComposer() has not been implemented.',
+    );
   }
 
   /// To check if the push [message] is for Intercom or not.
@@ -278,7 +288,8 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// Retrieve the details of the currently logged in user.
   Future<Map<String, dynamic>> fetchLoggedInUserAttributes() {
     throw UnimplementedError(
-        'fetchLoggedInUserAttributes() has not been implemented.');
+      'fetchLoggedInUserAttributes() has not been implemented.',
+    );
   }
 
   /// JWT (JSON Web Token) is the recommended method to secure your Messenger.
@@ -294,5 +305,24 @@ abstract class IntercomFlutterPlatform extends PlatformInterface {
   /// the correct keys [here](https://www.intercom.com/a/apps/_/settings/app-settings/authentication)
   Future<void> setAuthTokens(Map<String, String> tokens) {
     throw UnimplementedError('setAuthTokens() has not been implemented.');
+  }
+
+  /// Changes the Intercom workspace.
+  ///
+  /// On Android: Uses native changeWorkspace API (SDK 16.1.0+)
+  /// On iOS: Logs out and re-initializes with new credentials
+  ///
+  /// This will logout the current user and clear all SDK data.
+  /// You must call login again after changing workspace.
+  ///
+  /// [appId] is required for both platforms.
+  /// [androidApiKey] is required for Android.
+  /// [iosApiKey] is required for iOS.
+  Future<void> changeWorkspace(
+    String appId, {
+    String? androidApiKey,
+    String? iosApiKey,
+  }) {
+    throw UnimplementedError('changeWorkspace() has not been implemented.');
   }
 }

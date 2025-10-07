@@ -36,8 +36,11 @@ class Intercom {
     String? androidApiKey,
     String? iosApiKey,
   }) {
-    return IntercomFlutterPlatform.instance
-        .initialize(appId, androidApiKey: androidApiKey, iosApiKey: iosApiKey);
+    return IntercomFlutterPlatform.instance.initialize(
+      appId,
+      androidApiKey: androidApiKey,
+      iosApiKey: iosApiKey,
+    );
   }
 
   /// You can check how many unread conversations a user has
@@ -79,18 +82,25 @@ class Intercom {
   ///
   /// You can register a identified user either with [userId] or with [email],
   /// but not with both.
-  Future<void> loginIdentifiedUser(
-      {String? userId, String? email, IntercomStatusCallback? statusCallback}) {
+  Future<void> loginIdentifiedUser({
+    String? userId,
+    String? email,
+    IntercomStatusCallback? statusCallback,
+  }) {
     return IntercomFlutterPlatform.instance.loginIdentifiedUser(
-        userId: userId, email: email, statusCallback: statusCallback);
+      userId: userId,
+      email: email,
+      statusCallback: statusCallback,
+    );
   }
 
   /// Function to create a unidentified user in Intercom.
   /// You need to register your users before you can talk to them and
   /// track their activity in your app.
   Future<void> loginUnidentifiedUser({IntercomStatusCallback? statusCallback}) {
-    return IntercomFlutterPlatform.instance
-        .loginUnidentifiedUser(statusCallback: statusCallback);
+    return IntercomFlutterPlatform.instance.loginUnidentifiedUser(
+      statusCallback: statusCallback,
+    );
   }
 
   /// Updates the attributes of the current Intercom user.
@@ -150,8 +160,9 @@ class Intercom {
 
   /// To allow or prevent in app messages from popping up in certain parts of your app.
   Future<void> setInAppMessagesVisibility(IntercomVisibility visibility) {
-    return IntercomFlutterPlatform.instance
-        .setInAppMessagesVisibility(visibility);
+    return IntercomFlutterPlatform.instance.setInAppMessagesVisibility(
+      visibility,
+    );
   }
 
   /// To open the Intercom messenger.
@@ -185,8 +196,9 @@ class Intercom {
   /// displayHelpCenterCollections will fail to load.
   /// The [collectionIds] you want to display.
   Future<void> displayHelpCenterCollections(List<String> collectionIds) {
-    return IntercomFlutterPlatform.instance
-        .displayHelpCenterCollections(collectionIds);
+    return IntercomFlutterPlatform.instance.displayHelpCenterCollections(
+      collectionIds,
+    );
   }
 
   /// To display an Activity with your Messages content.
@@ -214,7 +226,8 @@ class Intercom {
   ///
   /// When you want Intercom to act on that data, use this method.
   @Deprecated(
-      "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.")
+    "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.",
+  )
   Future<void> handlePushMessage() {
     return IntercomFlutterPlatform.instance.handlePushMessage();
   }
@@ -303,5 +316,28 @@ class Intercom {
   ///  the correct keys [here](https://www.intercom.com/a/apps/_/settings/app-settings/authentication)
   Future<void> setAuthTokens(Map<String, String> tokens) {
     return IntercomFlutterPlatform.instance.setAuthTokens(tokens);
+  }
+
+  /// Changes the Intercom workspace.
+  ///
+  /// On Android: Uses native changeWorkspace API (SDK 16.1.0+)
+  /// On iOS: Logs out and re-initializes with new credentials
+  ///
+  /// This will logout the current user and clear all SDK data.
+  /// You must call login again after changing workspace.
+  ///
+  /// [appId] is required for both platforms.
+  /// [androidApiKey] is required for Android.
+  /// [iosApiKey] is required for iOS.
+  Future<void> changeWorkspace(
+    String appId, {
+    String? androidApiKey,
+    String? iosApiKey,
+  }) {
+    return IntercomFlutterPlatform.instance.changeWorkspace(
+      appId,
+      androidApiKey: androidApiKey,
+      iosApiKey: iosApiKey,
+    );
   }
 }

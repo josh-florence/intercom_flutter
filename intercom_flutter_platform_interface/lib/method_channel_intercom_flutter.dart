@@ -39,7 +39,8 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
     if (userId?.isNotEmpty ?? false) {
       if (email?.isNotEmpty ?? false) {
         throw ArgumentError(
-            'The parameter `email` must be null if `userId` is provided.');
+          'The parameter `email` must be null if `userId` is provided.',
+        );
       }
       try {
         await _channel.invokeMethod('loginIdentifiedUserWithUserId', {
@@ -60,13 +61,15 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
       }
     } else {
       throw ArgumentError(
-          'An identification method must be provided as a parameter, either `userId` or `email`.');
+        'An identification method must be provided as a parameter, either `userId` or `email`.',
+      );
     }
   }
 
   @override
-  Future<void> loginUnidentifiedUser(
-      {IntercomStatusCallback? statusCallback}) async {
+  Future<void> loginUnidentifiedUser({
+    IntercomStatusCallback? statusCallback,
+  }) async {
     try {
       await _channel.invokeMethod('loginUnidentifiedUser');
       statusCallback?.onSuccess?.call();
@@ -152,8 +155,9 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
 
   @override
   Future<void> displayHelpCenterCollections(List<String> collectionIds) {
-    return _channel.invokeMethod(
-        'displayHelpCenterCollections', {'collectionIds': collectionIds});
+    return _channel.invokeMethod('displayHelpCenterCollections', {
+      'collectionIds': collectionIds,
+    });
   }
 
   @override
@@ -163,8 +167,10 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
 
   @override
   Future<void> logEvent(String name, [Map<String, dynamic>? metaData]) async {
-    await _channel
-        .invokeMethod('logEvent', {'name': name, 'metaData': metaData});
+    await _channel.invokeMethod('logEvent', {
+      'name': name,
+      'metaData': metaData,
+    });
   }
 
   @override
@@ -175,7 +181,8 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
   }
 
   @Deprecated(
-      "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.")
+    "Calling this API is no longer required. Intercom will directly open the chat screen when a push notification is clicked.",
+  )
   @override
   Future<void> handlePushMessage() async {
     await _channel.invokeMethod('handlePushMessage');
@@ -191,8 +198,9 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
     if (!message.values.every((item) => item is String)) {
       return false;
     }
-    final result = await _channel
-        .invokeMethod<bool>('isIntercomPush', {'message': message});
+    final result = await _channel.invokeMethod<bool>('isIntercomPush', {
+      'message': message,
+    });
     return result ?? false;
   }
 
@@ -200,11 +208,13 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
   Future<void> handlePush(Map<String, dynamic> message) async {
     if (!message.values.every((item) => item is String)) {
       throw new ArgumentError(
-          'Intercom push messages can only have string values');
+        'Intercom push messages can only have string values',
+      );
     }
 
-    return await _channel
-        .invokeMethod<void>('handlePush', {'message': message});
+    return await _channel.invokeMethod<void>('handlePush', {
+      'message': message,
+    });
   }
 
   @override
@@ -229,8 +239,9 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
 
   @override
   Future<void> displayConversation(String conversationId) async {
-    await _channel.invokeMethod(
-        'displayConversation', {'conversationId': conversationId});
+    await _channel.invokeMethod('displayConversation', {
+      'conversationId': conversationId,
+    });
   }
 
   @override
@@ -251,7 +262,8 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
   @override
   Future<Map<String, dynamic>> fetchLoggedInUserAttributes() async {
     var attributes = Map<String, dynamic>.from(
-        await _channel.invokeMethod<Map>('fetchLoggedInUserAttributes') ?? {});
+      await _channel.invokeMethod<Map>('fetchLoggedInUserAttributes') ?? {},
+    );
     return attributes;
   }
 
@@ -265,6 +277,19 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
     await _channel.invokeMethod('setAuthTokens', {'tokens': tokens});
   }
 
+  @override
+  Future<void> changeWorkspace(
+    String appId, {
+    String? androidApiKey,
+    String? iosApiKey,
+  }) async {
+    await _channel.invokeMethod('changeWorkspace', {
+      'appId': appId,
+      'androidApiKey': androidApiKey,
+      'iosApiKey': iosApiKey,
+    });
+  }
+
   /// Convert the [PlatformException] details to [IntercomError].
   /// From the Platform side if the intercom operation failed then error details
   /// will be sent as details in [PlatformException].
@@ -272,6 +297,8 @@ class MethodChannelIntercomFlutter extends IntercomFlutterPlatform {
     var details = e.details ?? {};
 
     return IntercomError(
-        details['errorCode'] ?? -1, details['errorMessage'] ?? e.message ?? "");
+      details['errorCode'] ?? -1,
+      details['errorMessage'] ?? e.message ?? "",
+    );
   }
 }
